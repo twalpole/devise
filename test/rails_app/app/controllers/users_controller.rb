@@ -1,6 +1,12 @@
 class UsersController < ApplicationController
-  prepend_before_filter :current_user, only: :exhibit
-  before_filter :authenticate_user!, except: [:accept, :exhibit]
+  if methods.include? :before_action
+    prepend_before_action :current_user, only: :exhibit
+    before_action :authenticate_user!, except: [:accept, :exhibit]
+  else
+    #Rails < 4.0 uses *_filter
+    prepend_before_filter :current_user, only: :exhibit
+    before_filter :authenticate_user!, except: [:accept, :exhibit]
+  end
   respond_to :html, :xml
 
   def index

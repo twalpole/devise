@@ -105,7 +105,7 @@ module ActionDispatch::Routing
     #      end
     #
     #      class ManagerController < ApplicationController
-    #        before_filter authenticate_manager!
+    #        before_action authenticate_manager!
     #
     #        def show
     #          @manager = current_manager
