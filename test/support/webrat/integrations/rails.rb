@@ -14,6 +14,17 @@ module Webrat
       ::Rails.logger
     end
   end
+
+  # if Rails.version >= '5.0.0'
+    class RailsAdapter
+      protected
+
+      def do_request(http_method, url, data, headers)
+        update_protocol(url)
+        integration_session.send(http_method, normalize_url(url), params: data, headers: headers)
+      end
+    end
+  # end
 end
 
 module ActionDispatch #:nodoc:

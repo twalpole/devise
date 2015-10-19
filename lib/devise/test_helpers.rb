@@ -1,6 +1,6 @@
 module Devise
   # Devise::TestHelpers provides a facility to test controllers in isolation
-  # when using ActionController::TestCase allowing you to quickly sign_in or
+  # when using Devise::ControllerTestCase allowing you to quickly sign_in or
   # sign_out a user. Do not use Devise::TestHelpers in integration tests.
   #
   # Notice you should not test Warden specific behavior (like Warden callbacks)
@@ -15,7 +15,7 @@ module Devise
 
     # Override process to consider warden.
     def process(*)
-      # Make sure we always return @response, a la ActionController::TestCase::Behaviour#process, even if warden interrupts
+      # Make sure we always return @response, a la Devise::ControllerTestCase::Behaviour#process, even if warden interrupts
       _catch_warden { super } # || @response  # _catch_warden will setup the @response object
 
       # process needs to return the ActionDispath::TestResponse object

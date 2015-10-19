@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class RememberMeTest < ActionDispatch::IntegrationTest
+class RememberMeTest < Devise::IntegrationTest
   def create_user_and_remember(add_to_token='')
     user = create_user
     user.remember_me!
@@ -47,8 +47,10 @@ class RememberMeTest < ActionDispatch::IntegrationTest
       get new_user_session_path
       assert request.session[:_csrf_token]
 
-      post user_session_path, authenticity_token: "oops", user:
-           { email: "jose.valim@gmail.com", password: "123456", remember_me: "1" }
+      post user_session_path, params: {
+          authenticity_token: "oops",
+          user: { email: "jose.valim@gmail.com", password: "123456", remember_me: "1" }
+        }
       assert_not warden.authenticated?(:user)
       assert_not request.cookies['remember_user_token']
     end

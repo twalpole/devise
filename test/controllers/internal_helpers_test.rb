@@ -3,7 +3,7 @@ require 'test_helper'
 class MyController < DeviseController
 end
 
-class HelpersTest < ActionController::TestCase
+class HelpersTest < Devise::ControllerTestCase
   tests MyController
 
   def setup

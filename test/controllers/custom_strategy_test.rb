@@ -24,7 +24,7 @@ class CustomStrategy < Warden::Strategies::Base
   end
 end
 
-class CustomStrategyTest < ActionController::TestCase
+class CustomStrategyTest < Devise::ControllerTestCase
   tests CustomStrategyController
 
   include Devise::TestHelpers

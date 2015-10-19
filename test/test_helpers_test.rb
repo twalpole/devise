@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TestHelpersTest < ActionController::TestCase
+class TestHelpersTest < Devise::ControllerTestCase
   tests UsersController
   include Devise::TestHelpers
 
@@ -27,7 +27,7 @@ class TestHelpersTest < ActionController::TestCase
       assert !user.active_for_authentication?
 
       sign_in user
-      get :accept, id: user
+      get :accept, params: { id: user }
       assert_nil assigns(:current_user)
     end
   end
