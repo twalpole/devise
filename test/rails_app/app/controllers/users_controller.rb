@@ -19,7 +19,7 @@ class UsersController < ApplicationController
   end
 
   def update_form
-    render text: 'Update'
+    render (Devise.rails5? ? :body : :text) => 'Update'
   end
 
   def accept
@@ -27,11 +27,11 @@ class UsersController < ApplicationController
   end
 
   def exhibit
-    render text: current_user ? "User is authenticated" : "User is not authenticated"
+    render (Devise.rails5? ? :body : :text) => current_user ? "User is authenticated" : "User is not authenticated"
   end
 
   def expire
     user_session['last_request_at'] = 31.minutes.ago.utc
-    render text: 'User will be expired on next request'
+    render (Devise.rails5? ? :body : :text) => 'User will be expired on next request'
   end
 end

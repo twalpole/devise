@@ -20,6 +20,8 @@ class HomeController < ApplicationController
   end
 
   def unauthenticated
-    render text: "unauthenticated", status: :unauthorized
+    r_opts = { status: :unauthorized}
+    r_opts[Devise.rails5? ? :body : :text] = "unauthenticated"
+    render r_opts
   end
 end
