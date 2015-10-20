@@ -1,13 +1,9 @@
 require "active_support/core_ext/object/try"
 require "active_support/core_ext/hash/slice"
 
-module ActionDispatch::Routing
-  class RouteSet #:nodoc:
-    # Ensure Devise modules are included only after loading routes, because we
-    # need devise_for mappings already declared to create filters and helpers.
-    def finalize_with_devise!
-      result = finalize_without_devise!
-
+module Devise
+  module RouteSet
+    def finalize_devise!
       @devise_finalized ||= begin
         if Devise.router_name.nil? && defined?(@devise_finalized) && self != Rails.application.try(:routes)
           warn "[DEVISE] We have detected that you are using devise_for inside engine routes. " \
@@ -21,10 +17,37 @@ module ActionDispatch::Routing
         Devise.regenerate_helpers!
         true
       end
+    end
 
+    def finalize!
+      result = super
+      finalize_devise!
       result
     end
-    alias_method_chain :finalize!, :devise
+
+    def finalize_with_devise!
+      result = finalize_without_devise!
+      finalize_devise!
+      result
+    end
+
+    def self.included(mod)
+      mod.class_eval do
+        alias_method_chain :finalize!, :devise
+      end
+    end
+  end
+end
+
+module ActionDispatch::Routing
+  class RouteSet #:nodoc:
+    # Ensure Devise modules are included only after loading routes, because we
+    # need devise_for mappings already declared to create filters and helpers.
+    if Module.respond_to? :prepend
+      prepend Devise::RouteSet
+    else
+      include Devise::RouteSet
+    end
   end
 
   class Mapper
